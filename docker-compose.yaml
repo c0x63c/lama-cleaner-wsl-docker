@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  cleaner:
+    build:
+      context: .
+      dockerfile: ./lama-cleaner/docker/GPUDockerfile
+      args:
+        - version=0.37.1
+    container_name: container
+    stdin_open: true
+    tty: true
+    environment:
+      gpus: 'all'
+    command: lama-cleaner --model=lama --device=cuda --port=18080
+    network_mode: 'host'
+    logging:
+      options:
+        max-size: '200k'
+        max-file: '10'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
